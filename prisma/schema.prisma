@@ -19,14 +19,31 @@ enum Gender {
   FEMALE
 }
 
+enum AccountType {
+  ASSET
+  LIABILITIES
+  EQUITY
+  INCOME
+  EXPENSES
+}
+
+enum JournalType {
+  GENERAL_JOURNAL
+  ADJUSTING_ENTRIES
+  REVERSING_ENTRIES
+  OPENING_ENTRIES
+}
+
 model User {
-  id String @id @default(uuid())
-  name String
-  email String
-  password String
-  gender Gender
-  phone String
-  address String
+  id                  String @id @default(uuid())
+  name                String
+  email               String
+  password            String
+  gender              Gender
+  phone               String
+  address             String
+  birth_date          DateTime
+  is_verified         Boolean
 
   is_deleted          Boolean   @db.Boolean() @default(false)
   deleted_by          String?
@@ -34,9 +51,124 @@ model User {
   created_at          DateTime  @default(now())
   updated_at          DateTime  @updatedAt
 
+  //account
+  accountCreated      Account[] @relation(name:"AccountCreatedBy")
+  accountUpdated      Account[] @relation(name:"AccountUpdatedBy")
+  accountDeleted      Account[] @relation(name:"AccountDeletedBy")
+
+  //journal
+  journalCreated      Journal[] @relation(name:"JournalCreatedBy")
+  journalUpdated      Journal[] @relation(name:"JournalUpdatedBy")
+  journalDeleted      Journal[] @relation(name:"JournalDeletedBy")
+
+  //journal account
+  journalAccountCreated      JournalAccount[] @relation(name:"JournalAccountCreatedBy")
+  journalAccountUpdated      JournalAccount[] @relation(name:"JournalAccountUpdatedBy")
+  journalAccountDeleted      JournalAccount[] @relation(name:"JournalAccountDeletedBy")
+
+  //budget
+  budgetCreated      Budget[] @relation(name:"BudgetCreatedBy")
+  budgetUpdated      Budget[] @relation(name:"BudgetUpdatedBy")
+  budgetDeleted      Budget[] @relation(name:"BudgetDeletedBy")
+
   @@map("user")
   @@unique([id])
 }
 
+model Account {
+  id                  String @id @default(uuid())
+  name                String
+  description         String?
+  type                AccountType
+  budget_id           String?
 
+  is_deleted          Boolean   @db.Boolean() @default(false)
+  created_by          String
+  updated_by          String?
+  deleted_by          String?
+  deleted_at          DateTime?
+  created_at          DateTime  @default(now())
+  updated_at          DateTime  @updatedAt
+
+  journalAccount      JournalAccount[]
+
+  createdBy           User @relation(fields: [created_by], references: [id], name: "AccountCreatedBy")
+  updatedBy           User? @relation(fields: [updated_by], references: [id], name: "AccountUpdatedBy")
+  deletedBy           User? @relation(fields: [deleted_by], references: [id], name: "AccountDeletedBy")
+
+  budgetAccount       Budget? @relation(fields: [budget_id], references: [id])
+
+  @@map("account")
+  @@unique([id])
+}
+
+model Journal {
+  id                  String @id @default(uuid())
+  type                JournalType
+  description         String?
+
+  is_deleted          Boolean   @db.Boolean() @default(false)
+  created_by          String
+  updated_by          String?
+  deleted_by          String?
+  deleted_at          DateTime?
+  created_at          DateTime  @default(now())
+  updated_at          DateTime  @updatedAt
+
+  journalAccount      JournalAccount[]
+
+  createdBy           User @relation(fields: [created_by], references: [id], name: "JournalCreatedBy")
+  updatedBy           User? @relation(fields: [updated_by], references: [id], name: "JournalUpdatedBy")
+  deletedBy           User? @relation(fields: [deleted_by], references: [id], name: "JournalDeletedBy")
+
+
+  @@map("journal")
+  @@unique([id])
+}
+
+model JournalAccount {
+  journal_id          String
+  account_id          String
+  amount              Int
+
+  is_deleted          Boolean   @db.Boolean() @default(false)
+  created_by          String
+  updated_by          String?
+  deleted_by          String?
+  deleted_at          DateTime?
+  created_at          DateTime  @default(now())
+  updated_at          DateTime  @updatedAt
+
+  journal             Journal @relation(fields: [journal_id], references: [id])
+  account             Account @relation(fields: [account_id], references: [id])
+
+  createdBy           User @relation(fields: [created_by], references: [id], name: "JournalAccountCreatedBy")
+  updatedBy           User? @relation(fields: [updated_by], references: [id], name: "JournalAccountUpdatedBy")
+  deletedBy           User? @relation(fields: [deleted_by], references: [id], name: "JournalAccountDeletedBy")
+
+  @@map("journal_account")
+  @@unique([journal_id, account_id])
+}
+
+model Budget {
+  id                  String @id @default(uuid())
+  name                String
+  amount              Int
+
+  is_deleted          Boolean   @db.Boolean() @default(false)
+  created_by          String
+  updated_by          String?
+  deleted_by          String?
+  deleted_at          DateTime?
+  created_at          DateTime  @default(now())
+  updated_at          DateTime  @updatedAt
+
+  createdBy           User @relation(fields: [created_by], references: [id], name: "BudgetCreatedBy")
+  updatedBy           User? @relation(fields: [updated_by], references: [id], name: "BudgetUpdatedBy")
+  deletedBy           User? @relation(fields: [deleted_by], references: [id], name: "BudgetDeletedBy")
+
+  budgetAccount       Account[]
+
+  @@map("budget")
+}
 
