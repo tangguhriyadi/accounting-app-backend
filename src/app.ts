@@ -4,10 +4,10 @@ import helmet from "helmet";
 import pino from "pino";
 import requestLogger from "./middlewares/request_logger";
 import { errorMiddleware } from "./middlewares/error";
-// import ApiRoutes from "./api/routes";
 import bodyParser from "body-parser";
 import { notFound } from "./utils/not_found";
 import { healtCheck } from "./utils/health_check";
+import ApiRoutes from "./modules";
 
 export const logger = pino({ name: "server start" });
 const app = express();
@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(requestLogger);
 
 // register API routes
-// app.use("/api", ApiRoutes);
+app.use("/api", ApiRoutes);
 app.get("/", healtCheck);
 
 // route not found handler

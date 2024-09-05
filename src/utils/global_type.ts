@@ -1,3 +1,5 @@
+import { Gender } from "@prisma/client";
+
 export type Pagination = {
     page: number;
     total_page: number;
@@ -11,4 +13,7 @@ export type JWTPayload = {
     email: string;
     phone: string
     address: string
+    is_verified: string
+    gender: Gender
+    birth_date: string
 };
