@@ -13,7 +13,7 @@ export type JWTPayload = {
     email: string;
     phone: string
     address: string
-    is_verified: string
+    is_verified: boolean
     gender: Gender
     birth_date: string
 };

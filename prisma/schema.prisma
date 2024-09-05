@@ -90,13 +90,13 @@ model Account {
   created_at          DateTime  @default(now())
   updated_at          DateTime  @updatedAt
 
-  journalAccount      JournalAccount[]
+  journal_account     JournalAccount[]
 
   createdBy           User @relation(fields: [created_by], references: [id], name: "AccountCreatedBy")
   updatedBy           User? @relation(fields: [updated_by], references: [id], name: "AccountUpdatedBy")
   deletedBy           User? @relation(fields: [deleted_by], references: [id], name: "AccountDeletedBy")
 
-  budgetAccount       Budget? @relation(fields: [budget_id], references: [id])
+  budget              Budget? @relation(fields: [budget_id], references: [id])
 
   @@map("account")
   @@unique([id])
@@ -115,7 +115,7 @@ model Journal {
   created_at          DateTime  @default(now())
   updated_at          DateTime  @updatedAt
 
-  journalAccount      JournalAccount[]
+  accounts            JournalAccount[]
 
   createdBy           User @relation(fields: [created_by], references: [id], name: "JournalCreatedBy")
   updatedBy           User? @relation(fields: [updated_by], references: [id], name: "JournalUpdatedBy")
@@ -167,7 +167,7 @@ model Budget {
   updatedBy           User? @relation(fields: [updated_by], references: [id], name: "BudgetUpdatedBy")
   deletedBy           User? @relation(fields: [deleted_by], references: [id], name: "BudgetDeletedBy")
 
-  budgetAccount       Account[]
+  accounts            Account[]
 
   @@map("budget")
 }
