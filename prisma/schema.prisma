@@ -34,6 +34,11 @@ enum JournalType {
   OPENING_ENTRIES
 }
 
+enum JournalSide {
+  DEBIT
+  CREDIT
+}
+
 model User {
   id                  String @id @default(uuid())
   name                String
@@ -130,6 +135,7 @@ model JournalAccount {
   journal_id          String
   account_id          String
   amount              Int
+  side                JournalSide
 
   is_deleted          Boolean   @db.Boolean() @default(false)
   created_by          String
@@ -147,7 +153,7 @@ model JournalAccount {
   deletedBy           User? @relation(fields: [deleted_by], references: [id], name: "JournalAccountDeletedBy")
 
   @@map("journal_account")
-  @@unique([journal_id, account_id])
+  @@unique([journal_id, account_id, side])
 }
 
 model Budget {

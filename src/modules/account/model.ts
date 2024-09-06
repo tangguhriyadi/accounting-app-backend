@@ -1,14 +1,7 @@
 import { Request } from "express";
 import { z } from "zod";
 import { queryParams } from "../../utils/global_schema";
-
-enum AccountType {
-    ASSET = "ASSET",
-    LIABILITIES = "LIABILITIES",
-    EQUITY = "EQUITY",
-    INCOME = "INCOME",
-    EXPENSES = "EXPENSES",
-}
+import { AccountType } from "../../utils/global_enum";
 
 export const accountParams = z.object({
     id: z.string(),
