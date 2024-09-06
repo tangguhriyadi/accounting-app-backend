@@ -1,9 +1,10 @@
+import { AccountType } from "@prisma/client";
 import { prisma } from "../../plugins/prisma";
-import { QueryParams, transformSortOrder } from "../../utils/global_schema";
-import { CreateAccountBody } from "./model";
+import { transformSortOrder } from "../../utils/global_schema";
+import { AccountQuery, CreateAccountBody } from "./model";
 
 export const accountRepository = {
-    findMany: async (query: QueryParams, user_id: string) => {
+    findMany: async (query: AccountQuery, user_id: string) => {
         return await prisma.account.findMany({
             select: {
                 id: true,
@@ -28,6 +29,9 @@ export const accountRepository = {
                 },
                 created_by: user_id,
                 budget_id: null,
+                type: {
+                    in: generateTypes(query.type),
+                },
             },
             orderBy: [
                 {
@@ -121,4 +125,10 @@ export const accountRepository = {
             },
         });
     },
+};
+
+const generateTypes = (types?: string): AccountType[] => {
+    if (!types || types.length === 0) return Object.values(AccountType);
+
+    return types?.split(",") as AccountType[];
 };

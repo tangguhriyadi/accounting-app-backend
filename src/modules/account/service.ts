@@ -1,6 +1,10 @@
 import { StatusCodes } from "http-status-codes";
-import { queryParams } from "../../utils/global_schema";
-import { accountParams, AccountRequest, createAccountBody } from "./model";
+import {
+    accountParams,
+    accountQuery,
+    AccountRequest,
+    createAccountBody,
+} from "./model";
 import { accountRepository } from "./repository";
 import { Pagination } from "../../utils/global_type";
 import { Response } from "express";
@@ -9,7 +13,7 @@ import { HttpException } from "../../response/exception";
 
 export const accountService = {
     findMany: async (req: AccountRequest, res: Response) => {
-        req.query = queryParams.parse(req.query);
+        req.query = accountQuery.parse(req.query);
 
         const accounts = await accountRepository.findMany(
             req.query,

@@ -1,6 +1,6 @@
 import { Request } from "express";
 import { z } from "zod";
-import { QueryParams } from "../../utils/global_schema";
+import { queryParams } from "../../utils/global_schema";
 
 enum AccountType {
     ASSET = "ASSET",
@@ -21,11 +21,16 @@ export const createAccountBody = z.object({
     budget_id: z.string().optional(),
 });
 
+export const accountQuery = queryParams.extend({
+    type: z.string().optional(),
+});
+
 export type AccountParams = z.infer<typeof accountParams>;
 export type CreateAccountBody = z.infer<typeof createAccountBody>;
+export type AccountQuery = z.infer<typeof accountQuery>;
 export type AccountRequest = Request<
     AccountParams,
     unknown,
     CreateAccountBody,
-    QueryParams
+    AccountQuery
 >;
