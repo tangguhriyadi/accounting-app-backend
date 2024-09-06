@@ -11,7 +11,10 @@ export const accountService = {
     findMany: async (req: AccountRequest, res: Response) => {
         req.query = queryParams.parse(req.query);
 
-        const accounts = await accountRepository.findMany(req.query);
+        const accounts = await accountRepository.findMany(
+            req.query,
+            req.user.id
+        );
 
         // PAGINATION
         const totalCount = await accountRepository.count(req.query.keyword);
@@ -31,7 +34,10 @@ export const accountService = {
     findById: async (req: AccountRequest, res: Response) => {
         req.params = accountParams.parse(req.params);
 
-        const account = await accountRepository.findById(req.params.id);
+        const account = await accountRepository.findById(
+            req.params.id,
+            req.user.id
+        );
 
         if (!account) {
             throw new HttpException("Account not found", StatusCodes.NOT_FOUND);

@@ -3,7 +3,7 @@ import { QueryParams, transformSortOrder } from "../../utils/global_schema";
 import { CreateAccountBody } from "./model";
 
 export const accountRepository = {
-    findMany: async (query: QueryParams) => {
+    findMany: async (query: QueryParams, user_id: string) => {
         return await prisma.account.findMany({
             select: {
                 id: true,
@@ -26,6 +26,8 @@ export const accountRepository = {
                     contains: query.keyword,
                     mode: "insensitive",
                 },
+                created_by: user_id,
+                budget_id: null,
             },
             orderBy: [
                 {
@@ -36,7 +38,7 @@ export const accountRepository = {
             skip: (query.page - 1) * query.limit,
         });
     },
-    findById: async (id: string) => {
+    findById: async (id: string, user_id: string) => {
         return await prisma.account.findFirst({
             relationLoadStrategy: "join",
             select: {
@@ -57,6 +59,8 @@ export const accountRepository = {
             where: {
                 is_deleted: false,
                 id,
+                created_by: user_id,
+                budget_id: null,
             },
         });
     },
