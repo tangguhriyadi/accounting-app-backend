@@ -6,9 +6,14 @@ import { cashInService } from "./service";
 const cashInRoutes: Router = Router();
 
 cashInRoutes.post(
-    "/income",
+    "/asset",
     authMiddlewaare(),
-    errorHandler(cashInService.income)
+    errorHandler(cashInService.asset)
+);
+cashInRoutes.post(
+    "/liabilities",
+    authMiddlewaare(),
+    errorHandler(cashInService.liabilities)
 );
 cashInRoutes.post(
     "/equity",
@@ -16,9 +21,14 @@ cashInRoutes.post(
     errorHandler(cashInService.equity)
 );
 cashInRoutes.post(
-    "/liabilities",
+    "/income",
     authMiddlewaare(),
-    errorHandler(cashInService.liabilities)
+    errorHandler(cashInService.income)
+);
+cashInRoutes.post(
+    "/expense",
+    authMiddlewaare(),
+    errorHandler(cashInService.expense)
 );
 
 export default cashInRoutes;
