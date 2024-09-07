@@ -13,7 +13,13 @@ export const logger = pino({ name: "server start" });
 const app = express();
 
 // middlewares
-app.use(cors({ origin: ["*"] }));
+app.use(
+    cors({
+        origin: ["*"],
+        allowedHeaders: ["GET", "OPTIONS", "PATCH", "DELETE", "POST", "PUT"],
+        credentials: true,
+    })
+);
 app.use(helmet());
 app.use(
     bodyParser.urlencoded({
