@@ -1,5 +1,5 @@
 import express from "express";
-import cors from "cors";
+// import cors from "cors";
 import helmet from "helmet";
 import pino from "pino";
 import requestLogger from "./middlewares/request_logger";
@@ -13,13 +13,13 @@ export const logger = pino({ name: "server start" });
 const app = express();
 
 // middlewares
-app.use(
-    cors({
-        origin: "*",
-        allowedHeaders: ["GET", "OPTIONS", "PATCH", "DELETE", "POST", "PUT"],
-        methods: ["GET", "OPTIONS", "PATCH", "DELETE", "POST", "PUT"],
-    })
-);
+// app.use(
+//     cors({
+//         origin: "*",
+//         allowedHeaders: ["GET", "OPTIONS", "PATCH", "DELETE", "POST", "PUT"],
+//         methods: ["GET", "OPTIONS", "PATCH", "DELETE", "POST", "PUT"],
+//     })
+// );
 app.use(helmet());
 app.use(
     bodyParser.urlencoded({
