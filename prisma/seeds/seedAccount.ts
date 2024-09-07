@@ -10,12 +10,19 @@ export async function seedAccount(prisma: PrismaClient, id: string) {
     });
 
     if (!existingAccount) {
-        await prisma.account.create({
-            data: {
-                name: "Cash",
-                type: "ASSET",
-                created_by: id,
-            },
+        await prisma.account.createMany({
+            data: [
+                {
+                    name: "Cash",
+                    type: "ASSET",
+                    created_by: id,
+                },
+                {
+                    name: "Monthly Salary",
+                    type: "INCOME",
+                    created_by: id,
+                },
+            ],
         });
 
         console.log("account seeded");
